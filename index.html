@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoralea</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="night-mode">
+
+    <!-- Wadah Partikel (Kunang-kunang / Cahaya Pagi) -->
+    <div id="particles-background"></div>
+
+    <!-- LAYAR LOGIN (Tampilan dikembalikan seperti awal) -->
+    <div id="login-screen" class="active">
+        <div class="floating-elements" id="login-particles"></div>
+        <div class="login-box glass-effect">
+            <h2>Ruang Kata Kita</h2>
+            <p>Ruang rahasia untuk menuangkan rasa.</p>
+            <input type="password" id="passcode" placeholder="Masukkan Password ya...">
+            <button class="btn-primary" onclick="handleLogin()">Masuk Kebersamaan</button>
+            <p id="login-error">Kamu bukan pemilik ruangan ini.</p>
+        </div>
+    </div>
+    
+    <!-- HALAMAN UTAMA APLIKASI -->
+    <div id="main-app">
+        <!-- Tombol Ganti Nuansa -->
+        <button class="mode-toggle glass-effect" onclick="toggleTimeMode()" id="mode-btn">🌙 Mode Malam</button>
+
+        <header>
+            <h1 class="glowing-title">Ruang Kata Kita</h1>
+            <p class="subtitle">Ruang ini untuk kita, <span id="user-display"></span> >_<</p>
+            <button onclick="handleLogout()" class="btn-logout">Tutup Ruangan</button>
+        </header>
+
+        <main id="poems-container">
+            <!-- Kartu puisi cuplikan (preview) akan muncul di sini -->
+        </main>
+
+        <button class="fab btn-primary" onclick="openPoemModal()">+ Tulis Perasaan</button>
+    </div>
+
+    <!-- MODAL 1: BACA PUISI PENUH (Font sudah diperbaiki) -->
+    <div id="view-modal" class="modal">
+        <div class="modal-content glass-effect" id="view-modal-content">
+            <span class="close" onclick="closeViewModal()">&times;</span>
+            <h2 id="view-title"></h2>
+            <!-- Bagian ini sekarang diatur CSS agar fontnya sama seperti di depan -->
+            <div id="view-content"></div>
+            
+            <div class="poem-meta">
+                <span>Ditulis oleh: <b id="view-author"></b></span>
+                <small id="view-date"></small>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: TULIS / EDIT PUISI (Ukuran diperkecil) -->
+    <div id="poem-modal" class="modal">
+        <div class="modal-content text-mode glass-effect">
+            <span class="close text-dark" onclick="closePoemModal()">&times;</span>
+            <h2 id="modal-heading" class="modal-title">Goreskan Tintamu</h2>
+            <input type="hidden" id="poem-id">
+            <input type="text" id="poem-title" class="input-styled" placeholder="Berikan Judul Emosimu...">
+            <!-- Baris diperkecil jadi 5 agar tidak memakan layar -->
+            <textarea id="poem-content" class="input-styled" rows="5" placeholder="Ketik kata-kata manis atau puisimu di sini..."></textarea>
+            
+            <div class="theme-selector">
+                <p>Pilih Suasana Template Kartu:</p>
+                <div class="themes-grid">
+                    <div class="theme-opt theme-senja" onclick="changeSelectedTheme('theme-senja')" title="Senja Gradasi">🌅</div>
+                    <div class="theme-opt theme-malam" onclick="changeSelectedTheme('theme-malam')" title="Malam Gradasi">🌌</div>
+                    <div class="theme-opt theme-fajar" onclick="changeSelectedTheme('theme-fajar')" title="Fajar Gradasi">🌤️</div>
+                    <div class="theme-opt theme-aurora" onclick="changeSelectedTheme('theme-aurora')" title="Aurora Gradasi">🎆</div>
+                    <div class="theme-opt theme-laut" onclick="changeSelectedTheme('theme-laut')" title="Laut Gradasi">🌊</div>
+                    <div class="theme-opt theme-kucing" onclick="changeSelectedTheme('theme-kucing')" title="Kucing Lucu">🐱</div>
+                    <div class="theme-opt theme-bunga" onclick="changeSelectedTheme('theme-bunga')" title="Taman Bunga">🌸</div>
+                    <div class="theme-opt theme-hujan" onclick="changeSelectedTheme('theme-hujan')" title="Hujan Sendu">🌧️</div>
+                    <div class="theme-opt theme-kertas" onclick="changeSelectedTheme('theme-kertas')" title="Kertas Klasik">📜</div>
+                    <div class="theme-opt theme-daun" onclick="changeSelectedTheme('theme-daun')" title="Daun Tenang">🌿</div>
+                    <div class="theme-opt theme-kopi" onclick="changeSelectedTheme('theme-kopi')" title="Kopi Hangat">☕</div>
+                    <div class="theme-opt theme-bintang" onclick="changeSelectedTheme('theme-bintang')" title="Bintang Terang">⭐</div>
+                    <div class="theme-opt theme-hati" onclick="changeSelectedTheme('theme-hati')" title="Cinta">💖</div>
+                    <div class="theme-opt theme-kupu" onclick="changeSelectedTheme('theme-kupu')" title="Kupu-kupu">🦋</div>
+                    <div class="theme-opt theme-musik" onclick="changeSelectedTheme('theme-musik')" title="Nada Musik">🎵</div>
+                </div>
+            </div>
+            
+            <button onclick="handleSavePoem()" class="btn-primary" style="margin-top: 20px; width: 100%;">Simpan ke Dalam Hati</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

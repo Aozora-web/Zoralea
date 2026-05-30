@@ -1,0 +1,189 @@
+/* --- RESET, BASIC, & CUSTOM SCROLLBAR --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 117, 140, 0.5); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 117, 140, 0.8); }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    transition: background 1.5s ease, color 1.5s ease;
+}
+
+/* --- TEMA MALAM --- */
+body.night-mode { background-color: #050811; color: #e0e6ed; }
+body.night-mode .glowing-title { color: #ff9a9e; text-shadow: 0 0 25px rgba(255, 154, 158, 0.6); }
+body.night-mode .subtitle { color: #a1b0c7; }
+body.night-mode .btn-logout { background: rgba(255, 154, 158, 0.1); border: 1px solid #ff9a9e; color: #ff9a9e; }
+body.night-mode .btn-logout:hover { background: #ff9a9e; color: #050811; box-shadow: 0 5px 20px rgba(255, 154, 158, 0.4); }
+
+/* --- TEMA PAGI --- */
+body.morning-mode { background: linear-gradient(to bottom, #dcedfb 0%, #fdf5f7 100%); color: #334; }
+body.morning-mode .glowing-title { color: #d86a7d; text-shadow: 0 5px 15px rgba(216, 106, 125, 0.3); }
+body.morning-mode .subtitle { color: #667; }
+body.morning-mode .btn-logout { background: rgba(216, 106, 125, 0.1); border: 1px solid #d86a7d; color: #d86a7d; }
+body.morning-mode .btn-logout:hover { background: #d86a7d; color: white; box-shadow: 0 5px 20px rgba(216, 106, 125, 0.4); }
+
+/* --- EFEK GLASSMORPHISM (KACA BURAM ESTETIK) --- */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* --- TOMBOL-TOMBOL UMUM --- */
+.btn-primary {
+    background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+    color: white; border: none; padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 600; font-size: 1rem; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 117, 140, 0.4);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'Poppins', sans-serif;
+}
+.btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(255, 117, 140, 0.6); }
+
+/* Tombol Ganti Nuansa Kanan Atas (Kalem) */
+.mode-toggle {
+    position: absolute; top: 15px; right: 15px;
+    padding: 6px 14px; border-radius: 30px;
+    cursor: pointer; font-family: 'Poppins', sans-serif;
+    font-weight: 500; font-size: 0.75rem; 
+    color: inherit; border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease; z-index: 10;
+    opacity: 0.7; 
+}
+.mode-toggle:hover { transform: translateY(-2px); opacity: 1; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+/* --- HEADER DAN FONT --- */
+header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
+.glowing-title { font-family: 'Caveat', cursive; font-size: 4.5rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; transition: all 1s ease; }
+.subtitle { font-size: 1.1rem; font-weight: 400; }
+.btn-logout { padding: 10px 28px; border-radius: 50px; cursor: pointer; margin-top: 20px; font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease; }
+
+/* --- BACKGROUND PARTIKEL --- */
+#particles-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.firefly { position: absolute; width: 3px; height: 3px; background-color: #e2f07a; border-radius: 50%; box-shadow: 0 0 12px 4px rgba(226, 240, 122, 0.8); opacity: 0; animation: flash 4s infinite alternate, drift 25s infinite linear; }
+.morning-light { position: absolute; width: 6px; height: 6px; background-color: white; border-radius: 50%; box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.8); opacity: 0; animation: flash 6s infinite alternate, drift-slow 30s infinite linear; }
+
+@keyframes flash { 0%, 100% { opacity: 0; transform: scale(0.5); } 50% { opacity: 0.9; transform: scale(1.2); } }
+@keyframes drift { 0% { transform: translate(0, 0); } 50% { transform: translate(40px, -80px); } 100% { transform: translate(-20px, -150px); } }
+@keyframes drift-slow { 0% { transform: translate(0, 0); } 100% { transform: translate(60px, 100px); } }
+
+/* --- LAYAR LOGIN --- */
+#login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb); background-size: 400% 400%; animation: gradientMove 12s ease infinite; display: flex; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.6s ease; }
+#login-screen:not(.active) { opacity: 0; pointer-events: none; }
+.floating-elements { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 1; }
+.element { position: absolute; bottom: -50px; font-size: 24px; opacity: 0; animation: floatUp 8s linear infinite; }
+.login-box { padding: 40px 30px; border-radius: 24px; text-align: center; width: 90%; max-width: 380px; z-index: 10; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+.login-box h2 { font-family: 'Caveat', cursive; font-size: 2.8rem; color: #d86a7d; margin-bottom: 5px; text-shadow: 0 2px 5px rgba(216, 106, 125, 0.1); }
+.login-box p { font-size: 0.9rem; color: #777; margin-bottom: 25px; }
+.login-box input { width: 100%; padding: 12px 16px; margin-bottom: 15px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.1); outline: none; text-align: center; font-family: 'Poppins'; font-size: 1rem; transition: 0.3s; background: rgba(255,255,255,0.9); }
+.login-box input:focus { border-color: #ff758c; box-shadow: 0 0 15px rgba(255,117,140,0.2); }
+#login-error { color: #e63946; font-size: 0.8rem; margin-top: 10px; display: none; font-weight: 500; }
+
+/* --- MAIN APP & GRID PUISI --- */
+#main-app { display: none; max-width: 1000px; margin: 0 auto; padding: 40px 20px 100px; position: relative; z-index: 2; }
+#poems-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
+.poem-card { padding: 30px; border-radius: 24px; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: popIn 0.6s forwards; opacity: 0; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.15); height: 240px; }
+.poem-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.25); }
+.poem-card:hover::before { content: "Sentuh untuk meresapi..."; position: absolute; top: 15px; right: 20px; font-size: 0.75rem; opacity: 0.8; z-index: 5; font-family: 'Poppins'; font-weight:500;}
+.poem-title { font-weight: 600; font-size: 1.3rem; margin-bottom: 12px; z-index: 2; position: relative; }
+.poem-content-preview { font-family: 'Caveat', cursive; font-size: 1.6rem; line-height: 1.4; z-index: 2; position: relative; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+.poem-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; font-size: 0.85rem; z-index: 3; position: relative; }
+.poem-actions { display: flex; gap: 10px; }
+.action-btn { background: rgba(255,255,255,0.3); border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; color: inherit; backdrop-filter: blur(4px); transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; }
+.action-btn:hover { background: rgba(255,255,255,0.9); color: #000; transform: scale(1.15) rotate(5deg); }
+
+/* --- 15 TEMA TEMPLATE KARTU --- */
+.poem-card::after, .modal-content::after { position: absolute; bottom: -20px; right: -20px; font-size: 9rem; opacity: 0.12; z-index: 1; pointer-events: none; }
+.theme-senja { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #4a1525; }
+.theme-malam { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); color: #f0f4f8; }
+.theme-fajar { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); color: #0b2b52; }
+.theme-aurora{ background: linear-gradient(135deg, #c471ed 0%, #12c2e9 100%); color: #1a0b2e; }
+.theme-laut  { background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); color: #e6f7ff; }
+.theme-kucing{ background: linear-gradient(135deg, #fceabb 0%, #f8b500 100%); color: #5c4300; } .theme-kucing::after { content: "🐱"; opacity: 0.2; }
+.theme-bunga { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); color: #35425c; } .theme-bunga::after { content: "🌸"; }
+.theme-hujan { background: linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%); color: #37474f; } .theme-hujan::after { content: "🌧️"; }
+.theme-kertas{ background: #fdfaf2; color: #443c30; border: 1px solid #eadeca; } .theme-kertas::after { content: "📜"; }
+.theme-daun  { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); color: #1b4d24; } .theme-daun::after { content: "🌿"; }
+.theme-kopi  { background: linear-gradient(135deg, #d3a17e 0%, #8b5a33 100%); color: #ffe6d4; } .theme-kopi::after { content: "☕"; }
+.theme-bintang{background: linear-gradient(135deg, #301847 0%, #C12A82 100%); color: #ffe6f2; } .theme-bintang::after { content: "⭐"; opacity: 0.1; }
+.theme-hati  { background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); color: #520014; } .theme-hati::after { content: "💖"; }
+.theme-kupu  { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #2d1c4d; } .theme-kupu::after { content: "🦋"; }
+.theme-musik { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #16365c; } .theme-musik::after { content: "🎵"; }
+
+/* --- FAB (TOMBOL FLOAT TULIS) --- */
+.fab { position: fixed; bottom: 30px; right: 30px; padding: 15px 25px; font-size: 1rem; z-index: 50; }
+
+/* --- MODAL BACA & TULIS --- */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 200; padding: 15px; }
+.modal-content { position: relative; overflow: hidden; padding: 35px 30px; border-radius: 24px; width: 100%; max-width: 480px; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
+.modal-content.text-mode { background: rgba(255, 255, 255, 0.98); color: #333; }
+.close { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; opacity: 0.6; z-index: 10; transition: 0.2s;}
+.close:hover { opacity: 1; transform: scale(1.1); color: #ff758c; }
+.close.text-dark:hover { color: #d62828; }
+
+.modal-title { font-size: 1.5rem; margin-bottom: 20px; font-weight: 600; color: #444; }
+
+.input-styled { width: 100%; padding: 12px 16px; margin-bottom: 15px; border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; outline: none; background: rgba(255,255,255,0.8); transition: 0.3s; font-family: 'Poppins', sans-serif;}
+.input-styled:focus { border-color: #ff758c; background: white; box-shadow: 0 3px 10px rgba(255,117,140,0.1); }
+textarea.input-styled { font-family: 'Caveat', cursive; font-size: 1.6rem; color: #333; line-height: 1.4; resize: none; }
+
+/* ======================================================== */
+/* UPDATE: FONT STYLE & FITUR SCROLL KHUSUS BACA PUISI      */
+/* ======================================================== */
+#view-title { 
+    font-family: 'Poppins', sans-serif; 
+    font-size: 1.8rem; 
+    font-weight: 600; 
+    margin-bottom: 15px; 
+}
+
+#view-content { 
+    font-family: 'Caveat', cursive; 
+    font-size: 1.9rem; 
+    line-height: 1.4; 
+    white-space: pre-wrap; 
+    
+    /* Penambahan agar bisa di-scroll jika kepanjangan */
+    max-height: 55vh; 
+    overflow-y: auto; 
+    padding-right: 15px; /* Jarak agar teks tidak tertimpa scrollbar */
+}
+
+/* Custom Scrollbar Khusus untuk Bagian Baca Puisi */
+#view-content::-webkit-scrollbar { width: 5px; }
+#view-content::-webkit-scrollbar-track { background: transparent; }
+#view-content::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
+#view-content::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
+/* ======================================================== */
+
+.poem-meta { margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.4); padding-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;}
+
+.themes-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.theme-opt { width: 45px; height: 45px; border-radius: 12px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 1.3rem; border: 2px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s ease; }
+.theme-opt:hover { transform: translateY(-2px) scale(1.05); }
+.theme-opt.selected { border: 2px solid #333; transform: scale(1.15); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+/* Responsive HP */
+@media screen and (max-width: 600px) {
+    .glowing-title { font-size: 3rem; letter-spacing: 1px; }
+    .poem-card { height: 210px; padding: 25px; }
+    .poem-content-preview { font-size: 1.5rem; }
+    .fab { bottom: 20px; right: 20px; padding: 12px 20px; font-size: 0.95rem; }
+    .login-box { padding: 35px 25px; }
+    .modal-content { padding: 30px 25px; border-radius: 20px; }
+    #view-content { font-size: 1.7rem; max-height: 50vh; }
+}
+
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes modalPop { 0% { transform: scale(0.85) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+@keyframes floatUp { 0% { transform: translateY(0) rotate(0); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+@keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
