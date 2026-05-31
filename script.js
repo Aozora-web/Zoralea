@@ -2,11 +2,13 @@ let loggedUser = null;
 let activeTheme = 'theme-kertas';
 let isNightMode = false;
 let poems = [];
+let currentViewedPoemId = null; 
 
-// =========================================================================
-// PENTING: GANTI DENGAN KODE FIREBASE MILIKMU DARI CONSOLE.FIREBASE.GOOGLE.COM
-// Jika ini dibiarkan "AIzaSyASDFGH...", tombol simpan PASTI GAGAL / ERROR!
-// =========================================================================
+// --- VARIABEL UNTUK MELACAK NOTIFIKASI BARU ---
+let isInitialLoad = true;
+let knownPoemIds = new Set();
+let knownReplyIds = new Set();
+
 const firebaseConfig = {
   apiKey: "AIzaSyDZDWGR-8-SN1HpLEr8t4RzJRRPglKPLZQ",
   authDomain: "zoralea-e2bdb.firebaseapp.com",
@@ -16,10 +18,31 @@ const firebaseConfig = {
   appId: "1:705403846840:web:902a615de8ed13a310f44d",
   measurementId: "G-C7M1NQZ3CR"
 };
-// =========================================================================
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+
+// --- MEMINTA IZIN NOTIFIKASI KE HP ---
+function askNotificationPermission() {
+    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
+}
+
+// --- FUNGSI MENGIRIM NOTIFIKASI KE LAYAR HP ---
+function sendPushNotification(title, bodyMessage) {
+    if ("Notification" in window && Notification.permission === "granted") {
+        // Icon hati estetik untuk notifikasi
+        const iconUrl = "https://cdn-icons-png.flaticon.com/512/833/833472.png"; 
+        
+        // Memunculkan Notifikasi
+        new Notification(title, { 
+            body: bodyMessage, 
+            icon: iconUrl,
+            vibrate: [200, 100, 200] // Membuat HP bergetar
+        });
+    }
+}
 
 function initTimeMode() {
     const hour = new Date().getHours();
@@ -73,6 +96,7 @@ function createLoginParticles() {
 document.addEventListener('DOMContentLoaded', () => {
     initTimeMode();
     createLoginParticles();
+    askNotificationPermission(); // Minta izin saat web dibuka
 });
 
 function handleLogin() {
@@ -82,6 +106,9 @@ function handleLogin() {
     if (passcode === 'cakrawala' || passcode === 'imup') {
         loggedUser = passcode === 'cakrawala' ? 'Zora' : 'Lea';
         errorText.style.display = 'none';
+        
+        // Memastikan izin notifikasi diminta ulang jika sebelumnya belum
+        askNotificationPermission(); 
         
         document.getElementById('login-screen').classList.remove('active');
         setTimeout(() => {
@@ -100,20 +127,60 @@ function handleLogout() {
     document.getElementById('passcode').value = '';
     document.getElementById('main-app').style.display = 'none';
     document.getElementById('login-screen').style.display = 'flex';
+    isInitialLoad = true; // Reset status load
     setTimeout(() => { document.getElementById('login-screen').classList.add('active'); }, 50);
 }
 
+// --- FUNGSI MENDENGARKAN DATABASE SEKALIGUS CEK NOTIFIKASI ---
 function listenToFirebase() {
     database.ref('puisi_kita').on('value', (snapshot) => {
         poems = [];
         const data = snapshot.val();
+        
         if (data) {
             Object.keys(data).forEach(key => {
-                poems.push({ firebaseId: key, ...data[key] });
+                const poemData = data[key];
+                poems.push({ firebaseId: key, ...poemData });
+                
+                // CEK NOTIFIKASI PUISI BARU
+                if (!isInitialLoad) {
+                    if (!knownPoemIds.has(key) && poemData.author !== loggedUser) {
+                        sendPushNotification("Ruang Kata Kita", `${poemData.author} baru saja menulis sesuatu untukmu: "${poemData.title}"`);
+                    }
+                }
+                knownPoemIds.add(key);
+
+                // CEK NOTIFIKASI BALASAN BARU
+                if (poemData.replies) {
+                    Object.keys(poemData.replies).forEach(replyKey => {
+                        const replyData = poemData.replies[replyKey];
+                        
+                        if (!isInitialLoad) {
+                            if (!knownReplyIds.has(replyKey) && replyData.author !== loggedUser) {
+                                sendPushNotification("Balasan Baru", `${replyData.author} membalas tulisanmu: "${replyData.text}"`);
+                            }
+                        }
+                        knownReplyIds.add(replyKey);
+                    });
+                }
             });
+            
             poems.sort((a, b) => b.id - a.id);
         }
+        
+        // Setelah tarikan data pertama selesai, ubah status agar data selanjutnya memicu notifikasi
+        isInitialLoad = false; 
+
         displayPoems();
+        
+        if(currentViewedPoemId) {
+            const updatedPoem = poems.find(p => p.firebaseId === currentViewedPoemId);
+            if(updatedPoem) {
+                renderReplies(updatedPoem);
+            } else {
+                closeViewModal(); 
+            }
+        }
     });
 }
 
@@ -155,16 +222,103 @@ function displayPoems() {
 function openViewModal(id) {
     const poem = poems.find(p => p.id == id);
     if(poem) {
+        currentViewedPoemId = poem.firebaseId;
         document.getElementById('view-title').innerText = poem.title;
         document.getElementById('view-content').innerText = poem.content; 
         document.getElementById('view-author').innerText = poem.author;
         document.getElementById('view-date').innerText = poem.date;
         document.getElementById('view-modal-content').className = `modal-content ${poem.theme}`; 
+        
+        renderReplies(poem);
+
         document.getElementById('view-modal').style.display = 'flex';
     }
 }
 
-function closeViewModal() { document.getElementById('view-modal').style.display = 'none'; }
+function closeViewModal() { 
+    currentViewedPoemId = null;
+    document.getElementById('view-modal').style.display = 'none'; 
+}
+
+function renderReplies(poem) {
+    const list = document.getElementById('replies-list');
+    list.innerHTML = '';
+    
+    if(poem.replies) {
+        Object.keys(poem.replies).forEach(replyKey => {
+            const reply = poem.replies[replyKey];
+            const isMe = reply.author === loggedUser;
+            let actionsHtml = '';
+            
+            if(isMe) {
+                actionsHtml = `
+                    <div class="reply-actions">
+                        <button class="reply-btn" onclick="openEditReplyModal('${poem.firebaseId}', '${replyKey}')">✎ Edit</button>
+                        <button class="reply-btn" onclick="handleDeleteReply('${poem.firebaseId}', '${replyKey}')">🗑️</button>
+                    </div>
+                `;
+            }
+
+            list.innerHTML += `
+                <div class="reply-bubble ${isMe ? 'my-reply' : 'their-reply'}">
+                    <div>
+                        <strong>${reply.author} <span style="opacity:0.6; font-weight:400; font-size:0.75rem;">• ${reply.date}</span></strong>
+                        ${actionsHtml}
+                    </div>
+                    <p>${reply.text}</p>
+                </div>
+            `;
+        });
+    } else {
+        list.innerHTML = '<p class="no-reply">Belum ada balasan, jadilah yang pertama membalas...</p>';
+    }
+}
+
+function handleSendReply() {
+    if(!currentViewedPoemId) return;
+    const inputField = document.getElementById('reply-input');
+    const text = inputField.value.trim();
+    if(!text) return;
+    
+    const currentDate = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB, ' + new Date().toLocaleDateString('id-ID');
+    
+    const replyData = { author: loggedUser, text: text, date: currentDate, timestamp: Date.now() };
+    database.ref('puisi_kita/' + currentViewedPoemId + '/replies').push(replyData);
+    inputField.value = '';
+}
+
+function handleDeleteReply(poemId, replyId) {
+    if(confirm('Yakin ingin menghapus balasan ini?')) {
+        database.ref(`puisi_kita/${poemId}/replies/${replyId}`).remove();
+    }
+}
+
+function openEditReplyModal(poemId, replyId) {
+    const poem = poems.find(p => p.firebaseId === poemId);
+    if(poem && poem.replies && poem.replies[replyId]) {
+        const reply = poem.replies[replyId];
+        document.getElementById('edit-reply-poem-id').value = poemId;
+        document.getElementById('edit-reply-id').value = replyId;
+        document.getElementById('edit-reply-content').value = reply.text;
+        document.getElementById('edit-reply-modal').style.display = 'flex';
+    }
+}
+
+function closeEditReplyModal() { document.getElementById('edit-reply-modal').style.display = 'none'; }
+
+function handleSaveEditedReply() {
+    const poemId = document.getElementById('edit-reply-poem-id').value;
+    const replyId = document.getElementById('edit-reply-id').value;
+    const newText = document.getElementById('edit-reply-content').value.trim();
+
+    if(!newText) { alert('Balasan tidak boleh dikosongkan!'); return; }
+
+    const currentDate = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB, ' + new Date().toLocaleDateString('id-ID') + ' (diedit)';
+
+    database.ref(`puisi_kita/${poemId}/replies/${replyId}`).update({
+        text: newText, date: currentDate
+    }).then(() => { closeEditReplyModal(); });
+}
 
 function openPoemModal() {
     document.getElementById('poem-modal').style.display = 'flex';
@@ -189,36 +343,17 @@ function handleSavePoem() {
     const content = document.getElementById('poem-content').value.trim();
     const currentDate = new Date().toLocaleDateString('id-ID');
 
-    if (!title || !content) {
-        alert('Tuliskan judul dan isinya ya....'); return;
-    }
+    if (!title || !content) { alert('Tuliskan judul dan isinya ya....'); return; }
 
-    const poemData = {
-        title: title,
-        content: content,
-        theme: activeTheme,
-        author: loggedUser,
-        date: currentDate
-    };
+    const poemData = { title: title, content: content, theme: activeTheme, author: loggedUser, date: currentDate };
 
     if (firebaseId) {
         database.ref('puisi_kita/' + firebaseId).update({
-            title: title,
-            content: content,
-            theme: activeTheme,
-            date: currentDate + ' (diedit)'
-        }).then(() => { 
-            closePoemModal(); 
-        }).catch((error) => {
-            alert("Oops! Data gagal disimpan.\nPastikan Kunci Firebase milikmu sudah benar dan Rules Database disetel ke true.\n\nError: " + error.message);
-        });
+            title: title, content: content, theme: activeTheme, date: currentDate + ' (diedit)'
+        }).then(() => { closePoemModal(); });
     } else {
         poemData.id = Date.now();
-        database.ref('puisi_kita').push(poemData).then(() => { 
-            closePoemModal(); 
-        }).catch((error) => {
-            alert("Oops! Data gagal disimpan.\nPastikan Kunci Firebase milikmu sudah benar dan Rules Database disetel ke true.\n\nError: " + error.message);
-        });
+        database.ref('puisi_kita').push(poemData).then(() => { closePoemModal(); });
     }
 }
 
