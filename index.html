@@ -35,23 +35,55 @@
         </header>
 
         <main id="poems-container">
-            </main>
+            <!-- Kartu puisi akan muncul di sini -->
+        </main>
 
         <button class="fab btn-primary" onclick="openPoemModal()">+ Tulis Perasaan</button>
     </div>
 
+    <!-- MODAL BACA & BALAS PUISI -->
     <div id="view-modal" class="modal">
         <div class="modal-content glass-effect" id="view-modal-content">
             <span class="close" onclick="closeViewModal()">&times;</span>
             <h2 id="view-title"></h2>
-            <div id="view-content"></div>
-            <div class="poem-meta">
-                <span>Ditulis oleh: <b id="view-author"></b></span>
-                <small id="view-date"></small>
+            
+            <div class="view-scroll-area">
+                <div id="view-content"></div>
+                
+                <div class="poem-meta">
+                    <span>Ditulis oleh: <b id="view-author"></b></span>
+                    <small id="view-date"></small>
+                </div>
+
+                <div class="replies-wrapper">
+                    <h3>Kotak Balasan</h3>
+                    <div id="replies-list">
+                        <!-- Balasan muncul di sini -->
+                    </div>
+                    
+                    <div class="reply-input-box">
+                        <textarea id="reply-input" rows="2" placeholder="Balas pesannya di sini..."></textarea>
+                        <button onclick="handleSendReply()" class="btn-send-reply">Kirim</button>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 
+    <!-- MODAL EDIT BALASAN (BARU) -->
+    <div id="edit-reply-modal" class="modal">
+        <div class="modal-content text-mode glass-effect" style="max-width: 400px; padding: 25px;">
+            <span class="close text-dark" style="top: 10px; right: 15px;" onclick="closeEditReplyModal()">&times;</span>
+            <h3 style="font-family: 'Poppins', sans-serif; font-weight: 600; margin-bottom: 15px; color: #333;">Edit Balasan</h3>
+            <input type="hidden" id="edit-reply-poem-id">
+            <input type="hidden" id="edit-reply-id">
+            <textarea id="edit-reply-content" class="input-styled" rows="4" placeholder="Ubah balasanmu..."></textarea>
+            <button onclick="handleSaveEditedReply()" class="btn-primary" style="width: 100%; margin-top: 5px;">Simpan Perubahan</button>
+        </div>
+    </div>
+
+    <!-- MODAL TULIS PUISI -->
     <div id="poem-modal" class="modal">
         <div class="modal-content text-mode glass-effect">
             <span class="close text-dark" onclick="closePoemModal()">&times;</span>
