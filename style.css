@@ -1,4 +1,3 @@
-/* --- RESET, BASIC, & CUSTOM SCROLLBAR --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 ::-webkit-scrollbar { width: 8px; }
@@ -6,68 +5,33 @@
 ::-webkit-scrollbar-thumb { background: rgba(255, 117, 140, 0.5); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255, 117, 140, 0.8); }
 
-body {
-    font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
-    min-height: 100vh;
-    transition: background 1.5s ease, color 1.5s ease;
-}
+body { font-family: 'Poppins', sans-serif; overflow-x: hidden; min-height: 100vh; transition: background 1.5s ease, color 1.5s ease; }
 
-/* --- TEMA MALAM --- */
 body.night-mode { background-color: #050811; color: #e0e6ed; }
 body.night-mode .glowing-title { color: #ff9a9e; text-shadow: 0 0 25px rgba(255, 154, 158, 0.6); }
 body.night-mode .subtitle { color: #a1b0c7; }
 body.night-mode .btn-logout { background: rgba(255, 154, 158, 0.1); border: 1px solid #ff9a9e; color: #ff9a9e; }
 body.night-mode .btn-logout:hover { background: #ff9a9e; color: #050811; box-shadow: 0 5px 20px rgba(255, 154, 158, 0.4); }
 
-/* --- TEMA PAGI --- */
 body.morning-mode { background: linear-gradient(to bottom, #dcedfb 0%, #fdf5f7 100%); color: #334; }
 body.morning-mode .glowing-title { color: #d86a7d; text-shadow: 0 5px 15px rgba(216, 106, 125, 0.3); }
 body.morning-mode .subtitle { color: #667; }
 body.morning-mode .btn-logout { background: rgba(216, 106, 125, 0.1); border: 1px solid #d86a7d; color: #d86a7d; }
 body.morning-mode .btn-logout:hover { background: #d86a7d; color: white; box-shadow: 0 5px 20px rgba(216, 106, 125, 0.4); }
 
-/* --- EFEK GLASSMORPHISM (KACA BURAM ESTETIK) --- */
-.glass-effect {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
+.glass-effect { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
 
-/* --- TOMBOL-TOMBOL UMUM --- */
-.btn-primary {
-    background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-    color: white; border: none; padding: 14px 28px;
-    border-radius: 50px;
-    font-weight: 600; font-size: 1rem; cursor: pointer;
-    box-shadow: 0 6px 20px rgba(255, 117, 140, 0.4);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: 'Poppins', sans-serif;
-}
+.btn-primary { background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); color: white; border: none; padding: 14px 28px; border-radius: 50px; font-weight: 600; font-size: 1rem; cursor: pointer; box-shadow: 0 6px 20px rgba(255, 117, 140, 0.4); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-family: 'Poppins', sans-serif; }
 .btn-primary:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(255, 117, 140, 0.6); }
 
-/* Tombol Ganti Nuansa Kanan Atas (Kalem) */
-.mode-toggle {
-    position: absolute; top: 15px; right: 15px;
-    padding: 6px 14px; border-radius: 30px;
-    cursor: pointer; font-family: 'Poppins', sans-serif;
-    font-weight: 500; font-size: 0.75rem; 
-    color: inherit; border: 1px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease; z-index: 10;
-    opacity: 0.7; 
-}
+.mode-toggle { position: absolute; top: 15px; right: 15px; padding: 6px 14px; border-radius: 30px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 0.75rem; color: inherit; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); backdrop-filter: blur(5px); transition: all 0.3s ease; z-index: 10; opacity: 0.7; }
 .mode-toggle:hover { transform: translateY(-2px); opacity: 1; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-/* --- HEADER DAN FONT --- */
 header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
 .glowing-title { font-family: 'Caveat', cursive; font-size: 4.5rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 5px; transition: all 1s ease; }
 .subtitle { font-size: 1.1rem; font-weight: 400; }
 .btn-logout { padding: 10px 28px; border-radius: 50px; cursor: pointer; margin-top: 20px; font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease; }
 
-/* --- BACKGROUND PARTIKEL --- */
 #particles-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 .firefly { position: absolute; width: 3px; height: 3px; background-color: #e2f07a; border-radius: 50%; box-shadow: 0 0 12px 4px rgba(226, 240, 122, 0.8); opacity: 0; animation: flash 4s infinite alternate, drift 25s infinite linear; }
 .morning-light { position: absolute; width: 6px; height: 6px; background-color: white; border-radius: 50%; box-shadow: 0 0 20px 10px rgba(255, 255, 255, 0.8); opacity: 0; animation: flash 6s infinite alternate, drift-slow 30s infinite linear; }
@@ -76,7 +40,6 @@ header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
 @keyframes drift { 0% { transform: translate(0, 0); } 50% { transform: translate(40px, -80px); } 100% { transform: translate(-20px, -150px); } }
 @keyframes drift-slow { 0% { transform: translate(0, 0); } 100% { transform: translate(60px, 100px); } }
 
-/* --- LAYAR LOGIN --- */
 #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: linear-gradient(-45deg, #ff9a9e, #fecfef, #a1c4fd, #c2e9fb); background-size: 400% 400%; animation: gradientMove 12s ease infinite; display: flex; justify-content: center; align-items: center; z-index: 100; transition: opacity 0.6s ease; }
 #login-screen:not(.active) { opacity: 0; pointer-events: none; }
 .floating-elements { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 1; }
@@ -88,7 +51,6 @@ header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
 .login-box input:focus { border-color: #ff758c; box-shadow: 0 0 15px rgba(255,117,140,0.2); }
 #login-error { color: #e63946; font-size: 0.8rem; margin-top: 10px; display: none; font-weight: 500; }
 
-/* --- MAIN APP & GRID PUISI --- */
 #main-app { display: none; max-width: 1000px; margin: 0 auto; padding: 40px 20px 100px; position: relative; z-index: 2; }
 #poems-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 30px; }
 .poem-card { padding: 30px; border-radius: 24px; position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); animation: popIn 0.6s forwards; opacity: 0; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.15); height: 240px; }
@@ -101,7 +63,6 @@ header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
 .action-btn { background: rgba(255,255,255,0.3); border: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; color: inherit; backdrop-filter: blur(4px); transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; }
 .action-btn:hover { background: rgba(255,255,255,0.9); color: #000; transform: scale(1.15) rotate(5deg); }
 
-/* --- 15 TEMA TEMPLATE KARTU --- */
 .poem-card::after, .modal-content::after { position: absolute; bottom: -20px; right: -20px; font-size: 9rem; opacity: 0.12; z-index: 1; pointer-events: none; }
 .theme-senja { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: #4a1525; }
 .theme-malam { background: linear-gradient(135deg, #141e30 0%, #243b55 100%); color: #f0f4f8; }
@@ -119,10 +80,8 @@ header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
 .theme-kupu  { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); color: #2d1c4d; } .theme-kupu::after { content: "🦋"; }
 .theme-musik { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); color: #16365c; } .theme-musik::after { content: "🎵"; }
 
-/* --- FAB (TOMBOL FLOAT TULIS) --- */
 .fab { position: fixed; bottom: 30px; right: 30px; padding: 15px 25px; font-size: 1rem; z-index: 50; }
 
-/* --- MODAL BACA & TULIS --- */
 .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 200; padding: 15px; }
 .modal-content { position: relative; overflow: hidden; padding: 35px 30px; border-radius: 24px; width: 100%; max-width: 480px; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 15px 40px rgba(0,0,0,0.2); }
 .modal-content.text-mode { background: rgba(255, 255, 255, 0.98); color: #333; }
@@ -136,34 +95,12 @@ header { text-align: center; margin-bottom: 50px; padding-top: 20px; }
 .input-styled:focus { border-color: #ff758c; background: white; box-shadow: 0 3px 10px rgba(255,117,140,0.1); }
 textarea.input-styled { font-family: 'Caveat', cursive; font-size: 1.6rem; color: #333; line-height: 1.4; resize: none; }
 
-/* ======================================================== */
-/* UPDATE: FONT STYLE & FITUR SCROLL KHUSUS BACA PUISI      */
-/* ======================================================== */
-#view-title { 
-    font-family: 'Poppins', sans-serif; 
-    font-size: 1.8rem; 
-    font-weight: 600; 
-    margin-bottom: 15px; 
-}
-
-#view-content { 
-    font-family: 'Caveat', cursive; 
-    font-size: 1.9rem; 
-    line-height: 1.4; 
-    white-space: pre-wrap; 
-    
-    /* Penambahan agar bisa di-scroll jika kepanjangan */
-    max-height: 55vh; 
-    overflow-y: auto; 
-    padding-right: 15px; /* Jarak agar teks tidak tertimpa scrollbar */
-}
-
-/* Custom Scrollbar Khusus untuk Bagian Baca Puisi */
+#view-title { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 600; margin-bottom: 15px; }
+#view-content { font-family: 'Caveat', cursive; font-size: 1.9rem; line-height: 1.4; white-space: pre-wrap; max-height: 55vh; overflow-y: auto; padding-right: 15px; }
 #view-content::-webkit-scrollbar { width: 5px; }
 #view-content::-webkit-scrollbar-track { background: transparent; }
 #view-content::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 10px; }
 #view-content::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); }
-/* ======================================================== */
 
 .poem-meta { margin-top: 25px; border-top: 1px dashed rgba(255,255,255,0.4); padding-top: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;}
 
@@ -172,7 +109,6 @@ textarea.input-styled { font-family: 'Caveat', cursive; font-size: 1.6rem; color
 .theme-opt:hover { transform: translateY(-2px) scale(1.05); }
 .theme-opt.selected { border: 2px solid #333; transform: scale(1.15); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-/* Responsive HP */
 @media screen and (max-width: 600px) {
     .glowing-title { font-size: 3rem; letter-spacing: 1px; }
     .poem-card { height: 210px; padding: 25px; }
